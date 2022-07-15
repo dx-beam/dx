@@ -26,7 +26,7 @@ defmodule Dx.Result do
       {:ok, false, %{}}
 
   The overall result is `{:ok, false, %{}}`.
-  While B would need more data to be loaded, C can already determind and is `false`,
+  While B would need more data to be loaded, C can already determined and is `false`,
   so and any additional data loaded will not change that.
 
   ### Example using `find`
