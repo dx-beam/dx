@@ -12,6 +12,8 @@ defmodule Dx do
   The corresponding `get!/3`, `load!/3` and `put!/3` functions return `result`
   directly, or otherwise raise an exception.
 
+  If you want to apply default options to all functions, `use` `Dx.Repo`.
+
   Arguments:
   - **subjects** can either be an individual subject (with the given predicates defined on it), or a list of subjects.
     Passing an individual subject will return the predicates for the subject, passing a list will return a list of them.
