@@ -8,6 +8,7 @@ defmodule Dx.Test.Repo.Migrations.CreateBaseSchema do
 
     create table(:users) do
       add :email, :string, null: false
+      add :verified_at, :utc_datetime
       add :first_name, :string
       add :last_name, :string
       add :role_id, references(:roles)

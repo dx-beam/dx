@@ -7,8 +7,8 @@ jobs:
 
     strategy:
       matrix:
-        elixir: [1.13.2]
-        otp: [24.1.7]
+        elixir: [1.14.4]
+        otp: [25.2.3]
 
     services:
       postgres:

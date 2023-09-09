@@ -6,6 +6,7 @@ defmodule Dx.Test.Schema.User do
 
   schema "users" do
     field :email, :string
+    field :verified_at, :utc_datetime
 
     field :first_name, :string
     field :last_name, :string

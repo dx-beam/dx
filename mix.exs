@@ -8,7 +8,7 @@ defmodule Dx.MixProject do
     [
       app: :dx,
       version: @version,
-      elixir: "~> 1.10",
+      elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
@@ -61,6 +61,7 @@ defmodule Dx.MixProject do
       {:postgrex, "~> 0.14", only: :test, runtime: false},
       {:timex, "~> 3.6", only: :test, runtime: false},
       {:refinery, "~> 0.1.0", github: "dx-beam/refinery", only: :test},
+      {:stream_data, "~> 0.6", only: [:dev, :test]},
       {:ex_doc, "~> 0.24", only: :dev, runtime: false}
     ]
   end

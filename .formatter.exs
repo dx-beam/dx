@@ -14,7 +14,7 @@ locals_without_parens = [
     "test/{dx,support}/**/*.{ex,exs}",
     "test/*.{ex,exs}"
   ],
-  import_deps: [:ecto],
+  import_deps: [:ecto, :stream_data],
   subdirectories: ["test/schema/migrations"],
   locals_without_parens: locals_without_parens,
   export: [

@@ -18,7 +18,7 @@ defmodule Dx.RefBranchingTest do
   end
 
   test "Ref on list returns a list of values", %{list: list, tasks: tasks} do
-    assert Dx.load!(list, {:ref, :tasks}) == Repo.reload!(tasks)
+    assert Dx.load!(list, {:ref, :tasks}) == unload(tasks)
   end
 
   test "Ref on field within a list returns a list of the field's values", %{

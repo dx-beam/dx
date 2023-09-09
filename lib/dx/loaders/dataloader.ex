@@ -18,7 +18,32 @@ defmodule Dx.Loaders.Dataloader do
   # 2. pass translatable part to lookup (unchanged)
   # 3. later: optimize batching
   # 4. on successful lookup, if not all translated, return {:partial, result, condition} for Dx.Engine
-  def lookup(cache, data_req) do
+  def lookup(cache, data_req, third_elem \\ true)
+
+  def lookup(cache, {:subset, %type{} = subject, subset}, third_elem) do
+    assocs = type.__schema__(:associations)
+
+    # for all key-value pairs in current map ...
+    Enum.reduce_while(subset, {:ok, subject}, fn {field, subset}, acc ->
+      if field in assocs do
+        result =
+          with {:ok, nested_value} <- fetch(cache, subject, field, third_elem),
+               {:ok, loaded_value} <- lookup(cache, {:subset, nested_value, subset}, third_elem) do
+            {:ok, Map.put(subject, field, loaded_value)}
+          end
+
+        Dx.Defd.Result.merge(acc, result)
+      else
+        {:cont, acc}
+      end
+    end)
+  end
+
+  def lookup(_cache, {:subset, subject, _subset}, third_elem) do
+    if third_elem, do: Result.ok(subject), else: Dx.Defd.Result.ok(subject)
+  end
+
+  def lookup(cache, data_req, third_elem) do
     case apply(Dataloader, :get, [cache | args_for(data_req)]) do
       {:error, "Unable to find " <> _} ->
         # try to translate to query here
@@ -27,10 +52,20 @@ defmodule Dx.Loaders.Dataloader do
         {:not_loaded, MapSet.new([data_req])}
 
       {:ok, result} ->
-        Result.ok(result)
+        if third_elem, do: Result.ok(result), else: Dx.Defd.Result.ok(result)
 
       other ->
         other
+    end
+  end
+
+  defp fetch(cache, subject, key, third_elem) do
+    case Map.fetch!(subject, key) do
+      %Ecto.Association.NotLoaded{} ->
+        lookup(cache, {:assoc, subject, key}, third_elem)
+
+      result ->
+        if third_elem, do: Result.ok(result), else: Dx.Defd.Result.ok(result)
     end
   end
 

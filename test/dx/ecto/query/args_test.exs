@@ -64,7 +64,7 @@ defmodule Dx.Ecto.Query.ArgsTest do
   end
 
   test "loads args record for condition on args record predicate3" do
-    user = create(User, %{role: %{name: "ADMIN"}}) |> Repo.reload!()
+    user = create(User, %{role: %{name: "ADMIN"}}) |> unload()
 
     query =
       Query.where(List, %{can_manage?: true},

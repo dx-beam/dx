@@ -21,7 +21,28 @@ defmodule Dx.Test.DataCase do
 
       import Test.Support.Factories
       import Test.Support.DateTimeHelpers
+      import Dx.Test.DataCase.Helpers
     end
+  end
+
+  defmodule Helpers do
+    def unload(record) when is_struct(record) do
+      Dx.Test.Repo.reload!(record)
+    end
+
+    def unload(map) when is_map(map) do
+      Map.new(map, fn {k, v} -> {unload(k), unload(v)} end)
+    end
+
+    def unload(records) when is_list(records) do
+      Enum.map(records, &unload/1)
+    end
+
+    def unload(tuple) when is_tuple(tuple) do
+      tuple |> Tuple.to_list() |> unload() |> List.to_tuple()
+    end
+
+    def unload(other), do: other
   end
 
   setup tags do
